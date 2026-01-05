@@ -1,3 +1,6 @@
+/***********************
+ * WEEKLY MENU DATA
+ ***********************/
 const weeklyMenu = {
   Monday: {
     breakfast: "Idli, Sambar, Chutney",
@@ -36,6 +39,9 @@ const weeklyMenu = {
   }
 };
 
+/***********************
+ * RATING LOGIC
+ ***********************/
 let selectedRating = 0;
 
 const stars = document.querySelectorAll(".stars span");
@@ -43,10 +49,18 @@ const submitBtn = document.getElementById("submitReview");
 const reviewText = document.getElementById("reviewText");
 const reviewMsg = document.getElementById("reviewMsg");
 
-// Star click logic
+// Today key (IMPORTANT)
+const todayKey = new Date().toDateString();
+const savedReview = JSON.parse(localStorage.getItem(todayKey));
+
+/***********************
+ * STAR CLICK
+ ***********************/
 stars.forEach(star => {
   star.addEventListener("click", () => {
-    selectedRating = star.getAttribute("data-value");
+    if (submitBtn.disabled) return;
+
+    selectedRating = parseInt(star.getAttribute("data-value"));
 
     stars.forEach(s => s.classList.remove("active"));
     for (let i = 0; i < selectedRating; i++) {
@@ -55,7 +69,9 @@ stars.forEach(star => {
   });
 });
 
-// Submit review
+/***********************
+ * SUBMIT REVIEW
+ ***********************/
 submitBtn.addEventListener("click", () => {
   if (selectedRating === 0) {
     reviewMsg.style.color = "red";
@@ -66,14 +82,38 @@ submitBtn.addEventListener("click", () => {
   const reviewData = {
     rating: selectedRating,
     review: reviewText.value,
-    date: new Date().toDateString()
+    date: todayKey
   };
 
-  localStorage.setItem("todayReview", JSON.stringify(reviewData));
+  // Save using DATE as key
+  localStorage.setItem(todayKey, JSON.stringify(reviewData));
 
-  reviewMsg.style.color = "green";
-  reviewMsg.textContent = "Thanks! Your review has been submitted 😊";
-
-  reviewText.value = "";
+  lockRating(reviewData);
 });
 
+/***********************
+ * LOAD EXISTING REVIEW
+ ***********************/
+if (savedReview) {
+  lockRating(savedReview);
+}
+
+/***********************
+ * LOCK UI FUNCTION
+ ***********************/
+function lockRating(data) {
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Already Submitted";
+
+  stars.forEach(star => star.style.pointerEvents = "none");
+  reviewText.disabled = true;
+
+  stars.forEach((star, index) => {
+    if (index < data.rating) {
+      star.classList.add("active");
+    }
+  });
+
+  reviewMsg.style.color = "green";
+  reviewMsg.textContent = `You rated today’s food ⭐${data.rating}`;
+}
