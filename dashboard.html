@@ -5,6 +5,8 @@
   <title>HostelLife – Dashboard</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
+<p id="roleBanner"></p>
+
 <body>
 
   <div class="app">
@@ -80,6 +82,21 @@
     weeklyMenuContainer.appendChild(div);
   }
 </script>
+<script>
+  const role = localStorage.getItem("userRole");
+  const banner = document.getElementById("roleBanner");
+
+  if (!role) {
+    window.location.href = "index.html";
+  }
+
+  if (role === "student") {
+    banner.textContent = "👩‍🎓 Student Dashboard";
+  } else if (role === "warden") {
+    banner.textContent = "🧑‍💼 Warden Dashboard";
+  }
+</script>
+
 
 <body>
   <div class="container">

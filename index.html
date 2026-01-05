@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>HostelLife | Login</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <div class="container">
+    <div class="card">
+      <h2>🏠 HostelLife</h2>
+      <p>Login to continue</p>
+
+      <select id="role">
+        <option value="">Select Role</option>
+        <option value="student">Student</option>
+        <option value="warden">Warden</option>
+      </select>
+
+      <button id="loginBtn">Login</button>
+      <p id="loginMsg"></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("loginBtn").addEventListener("click", () => {
+      const role = document.getElementById("role").value;
+      const msg = document.getElementById("loginMsg");
+
+      if (!role) {
+        msg.style.color = "red";
+        msg.textContent = "Please select a role";
+        return;
+      }
+
+      localStorage.setItem("userRole", role);
+      window.location.href = "dashboard.html";
+    });
+  </script>
+
+</body>
+</html>
