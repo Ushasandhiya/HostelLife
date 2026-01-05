@@ -35,3 +35,45 @@ const weeklyMenu = {
     dinner: "Chapati, Kurma"
   }
 };
+
+let selectedRating = 0;
+
+const stars = document.querySelectorAll(".stars span");
+const submitBtn = document.getElementById("submitReview");
+const reviewText = document.getElementById("reviewText");
+const reviewMsg = document.getElementById("reviewMsg");
+
+// Star click logic
+stars.forEach(star => {
+  star.addEventListener("click", () => {
+    selectedRating = star.getAttribute("data-value");
+
+    stars.forEach(s => s.classList.remove("active"));
+    for (let i = 0; i < selectedRating; i++) {
+      stars[i].classList.add("active");
+    }
+  });
+});
+
+// Submit review
+submitBtn.addEventListener("click", () => {
+  if (selectedRating === 0) {
+    reviewMsg.style.color = "red";
+    reviewMsg.textContent = "Please select a rating ⭐";
+    return;
+  }
+
+  const reviewData = {
+    rating: selectedRating,
+    review: reviewText.value,
+    date: new Date().toDateString()
+  };
+
+  localStorage.setItem("todayReview", JSON.stringify(reviewData));
+
+  reviewMsg.style.color = "green";
+  reviewMsg.textContent = "Thanks! Your review has been submitted 😊";
+
+  reviewText.value = "";
+});
+

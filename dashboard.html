@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>HostelLife – Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <div class="app">
+    <h1>🍽️ Today’s Mess Menu</h1>
+    <hr />
+
+<h2 style="margin-top:20px;">📅 Weekly Menu</h2>
+
+<div class="weekly-menu" id="weeklyMenu"></div>
+
+
+    <div class="menu-card highlight">
+
+      <h2 id="day"></h2>
+
+      <p><strong>Breakfast:</strong> <span id="breakfast"></span></p>
+      <p><strong>Lunch:</strong> <span id="lunch"></span></p>
+      <p><strong>Dinner:</strong> <span id="dinner"></span></p>
+    </div>
+  </div>
+
+  <!-- Rate Today's Food -->
+<div class="card">
+  <h2>⭐ Rate Today’s Food</h2>
+
+  <div class="stars">
+    <span data-value="1">★</span>
+    <span data-value="2">★</span>
+    <span data-value="3">★</span>
+    <span data-value="4">★</span>
+    <span data-value="5">★</span>
+  </div>
+
+  <textarea id="reviewText" placeholder="Write your review (optional)..."></textarea>
+
+  <button id="submitReview">Submit Review</button>
+
+  <p id="reviewMsg"></p>
+</div>
+
+
+  <script src="js/menu.js"></script>
+  <script>
+    const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    const today = days[new Date().getDay()];
+    const todayMenu = weeklyMenu[today];
+
+    document.getElementById("day").innerText = today;
+
+    document.getElementById("breakfast").innerText = todayMenu.breakfast;
+    document.getElementById("lunch").innerText = todayMenu.lunch;
+    document.getElementById("dinner").innerText = todayMenu.dinner;
+
+    
+  </script>
+
+  <script>
+  const weeklyMenuContainer = document.getElementById("weeklyMenu");
+
+  for (const day in weeklyMenu) {
+    const menu = weeklyMenu[day];
+
+    const div = document.createElement("div");
+    div.className = "menu-day";
+
+    div.innerHTML = `
+      <h3>${day}</h3>
+      <p><strong>Breakfast:</strong> ${menu.breakfast}</p>
+      <p><strong>Lunch:</strong> ${menu.lunch}</p>
+      <p><strong>Dinner:</strong> ${menu.dinner}</p>
+    `;
+
+    weeklyMenuContainer.appendChild(div);
+  }
+</script>
+
+<body>
+  <div class="container">
+
+    <!-- Today Menu -->
+    <!-- Weekly Menu -->
+    <!-- Rating Section -->
+
+  </div>
+
+  <script src="js/menu.js"></script>
+</body>
+
+
+
+</body>
+</html>
