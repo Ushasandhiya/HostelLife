@@ -116,3 +116,31 @@ body.warden-bg.dark button {
   background: #f39c12;
   color: #222;
 }
+/* ===== RATING VISUALS ===== */
+
+.rating-stars {
+  font-size: 26px;
+  margin: 10px 0;
+  letter-spacing: 3px;
+}
+
+.rating-bar {
+  width: 100%;
+  height: 10px;
+  background: #eee;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.rating-fill {
+  height: 100%;
+  width: 0%;
+  background: green;
+  transition: width 0.5s ease;
+}
+
+/* Color logic */
+.red { color: #e74c3c; }
+.yellow { color: #f1c40f; }
+.green { color: #2ecc71; }

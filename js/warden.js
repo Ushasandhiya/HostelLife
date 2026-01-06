@@ -126,13 +126,29 @@ const ratings = Object.keys(localStorage)
   })
   .filter(r => typeof r === "number");
 
-document.getElementById("totalReviews").textContent = ratings.length;
+const total = ratings.length;
+document.getElementById("totalReviews").textContent = total;
 
-if (ratings.length > 0) {
+const starsEl = document.getElementById("ratingStars");
+const fillEl = document.getElementById("ratingFill");
+
+if (total > 0) {
   const avg =
-    ratings.reduce((a, b) => a + b, 0) / ratings.length;
+    ratings.reduce((a, b) => a + b, 0) / total;
+
   document.getElementById("avgRating").textContent =
     avg.toFixed(1);
+
+  // Progress bar (out of 5)
+  const percent = (avg / 5) * 100;
+  fillEl.style.width = percent + "%";
+
+  // Star color logic
+  starsEl.className = "rating-stars " +
+    (avg <= 1.5 ? "red" :
+     avg <= 3.5 ? "yellow" : "green");
 } else {
   document.getElementById("avgRating").textContent = "–";
+  fillEl.style.width = "0%";
+  starsEl.className = "rating-stars";
 }
