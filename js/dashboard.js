@@ -1,34 +1,55 @@
+/*********************************
+ * DARK MODE
+ *********************************/
 const themeBtn = document.getElementById("themeToggle");
 
-if (localStorage.getItem("theme") === "dark") {
+if (themeBtn && localStorage.getItem("theme") === "dark") {
   document.body.classList.add("dark");
   themeBtn.textContent = "☀️";
 }
 
-themeBtn.onclick = () => {
-  document.body.classList.toggle("dark");
-  const isDark = document.body.classList.contains("dark");
-  localStorage.setItem("theme", isDark ? "dark" : "light");
-  themeBtn.textContent = isDark ? "☀️" : "🌙";
-};
+if (themeBtn) {
+  themeBtn.onclick = () => {
+    document.body.classList.toggle("dark");
+    const isDark = document.body.classList.contains("dark");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+    themeBtn.textContent = isDark ? "☀️" : "🌙";
+  };
+}
 
-
-// -------- AUTH CHECK ----------
+/*********************************
+ * AUTH CHECK
+ *********************************/
 if (!localStorage.getItem("userRole")) {
   window.location.href = "index.html";
 }
 
-// -------- LOGOUT ----------
+/*********************************
+ * LOGOUT
+ *********************************/
 document.getElementById("logoutBtn").onclick = () => {
   localStorage.removeItem("userRole");
   window.location.href = "index.html";
 };
 
-// -------- ANNOUNCEMENT BADGE ----------
-const badge = document.getElementById("announcementBadge");
-const announcements =
+/*********************************
+ * STUDENT ANNOUNCEMENTS + BADGE
+ *********************************/
+let announcements =
   JSON.parse(localStorage.getItem("announcements")) || [];
 
+const announcementList =
+  document.getElementById("announcementList");
+
+const badge =
+  document.getElementById("announcementBadge");
+
+/* Clean corrupted / old data */
+announcements = announcements.filter(
+  a => typeof a === "object" && a.text && a.time
+);
+
+/* ----- Badge count ----- */
 if (announcements.length > 0) {
   badge.textContent = announcements.length;
   badge.classList.remove("hidden");
@@ -36,8 +57,29 @@ if (announcements.length > 0) {
   badge.classList.add("hidden");
 }
 
+/* ----- Display announcements ----- */
+announcementList.innerHTML = "";
 
-// -------- MENU DATA ----------
+if (announcements.length === 0) {
+  announcementList.innerHTML =
+    "<p class='muted'>No announcements yet</p>";
+} else {
+  announcements.forEach(a => {
+    const div = document.createElement("div");
+    div.className = "announcement-item";
+
+    div.innerHTML = `
+      <p>${a.text}</p>
+      <small>${a.time}</small>
+    `;
+
+    announcementList.appendChild(div);
+  });
+}
+
+/*********************************
+ * MENU DATA
+ *********************************/
 const weeklyMenu = {
   Monday:{ breakfast:"Idli", lunch:"Rice & Sambar", dinner:"Chapati" },
   Tuesday:{ breakfast:"Pongal", lunch:"Rasam Rice", dinner:"Dosa" },
@@ -51,11 +93,16 @@ const weeklyMenu = {
 const days = Object.keys(weeklyMenu);
 const today = days[new Date().getDay() - 1] || "Monday";
 
-document.getElementById("breakfast").textContent = weeklyMenu[today].breakfast;
-document.getElementById("lunch").textContent = weeklyMenu[today].lunch;
-document.getElementById("dinner").textContent = weeklyMenu[today].dinner;
+document.getElementById("breakfast").textContent =
+  weeklyMenu[today].breakfast;
+document.getElementById("lunch").textContent =
+  weeklyMenu[today].lunch;
+document.getElementById("dinner").textContent =
+  weeklyMenu[today].dinner;
 
-// -------- WEEKLY MENU TOGGLE ----------
+/*********************************
+ * WEEKLY MENU TOGGLE
+ *********************************/
 const weeklyBox = document.getElementById("weeklyMenu");
 document.getElementById("toggleWeekly").onclick = () => {
   weeklyBox.classList.toggle("hidden");
@@ -64,14 +111,18 @@ document.getElementById("toggleWeekly").onclick = () => {
 for (let day in weeklyMenu) {
   const div = document.createElement("div");
   div.className = "menu-day";
-  div.innerHTML = `<strong>${day}</strong><br>
+  div.innerHTML = `
+    <strong>${day}</strong><br>
     🍳 ${weeklyMenu[day].breakfast}<br>
     🍛 ${weeklyMenu[day].lunch}<br>
-    🌙 ${weeklyMenu[day].dinner}`;
+    🌙 ${weeklyMenu[day].dinner}
+  `;
   weeklyBox.appendChild(div);
 }
 
-// -------- RATING ----------
+/*********************************
+ * RATING
+ *********************************/
 let selected = 0;
 const stars = document.querySelectorAll(".stars span");
 const msg = document.getElementById("reviewMsg");
