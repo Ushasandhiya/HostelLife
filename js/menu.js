@@ -117,3 +117,63 @@ function lockRating(data) {
   reviewMsg.style.color = "green";
   reviewMsg.textContent = `You rated today’s food ⭐${data.rating}`;
 }
+
+/***********************
+ * ANNOUNCEMENTS LOGIC
+ ***********************/
+const announcementInput = document.getElementById("announcementText");
+const postBtn = document.getElementById("postAnnouncement");
+const announceMsg = document.getElementById("announceMsg");
+const announcementList = document.getElementById("announcementList");
+
+// Load existing announcements
+let announcements = JSON.parse(localStorage.getItem("announcements")) || [];
+
+function renderAnnouncements() {
+  if (!announcementList) return;
+
+  announcementList.innerHTML = "";
+
+  if (announcements.length === 0) {
+    announcementList.innerHTML = "<p>No announcements yet.</p>";
+    return;
+  }
+
+  announcements.forEach(a => {
+    const div = document.createElement("div");
+    div.className = "menu-day";
+    div.innerHTML = `
+      <p>${a.text}</p>
+      <small>${a.date}</small>
+    `;
+    announcementList.appendChild(div);
+  });
+}
+
+// Post announcement (warden only)
+if (postBtn) {
+  postBtn.addEventListener("click", () => {
+    if (!announcementInput.value.trim()) {
+      announceMsg.style.color = "red";
+      announceMsg.textContent = "Announcement cannot be empty";
+      return;
+    }
+
+    const newAnnouncement = {
+      text: announcementInput.value,
+      date: new Date().toLocaleString()
+    };
+
+    announcements.unshift(newAnnouncement);
+    localStorage.setItem("announcements", JSON.stringify(announcements));
+
+    announceMsg.style.color = "green";
+    announceMsg.textContent = "Announcement posted ✅";
+    announcementInput.value = "";
+
+    renderAnnouncements();
+  });
+}
+
+// Initial render
+renderAnnouncements();
