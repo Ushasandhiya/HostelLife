@@ -155,3 +155,14 @@ body.dark button {
   background: #f39c12;
   color: #222;
 }
+/* ===== ANNOUNCEMENT BADGE ===== */
+.badge {
+  background: #e74c3c;
+  color: white;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-left: 8px;
+  font-weight: bold;
+}
+

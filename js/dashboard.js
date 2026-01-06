@@ -24,6 +24,19 @@ document.getElementById("logoutBtn").onclick = () => {
   window.location.href = "index.html";
 };
 
+// -------- ANNOUNCEMENT BADGE ----------
+const badge = document.getElementById("announcementBadge");
+const announcements =
+  JSON.parse(localStorage.getItem("announcements")) || [];
+
+if (announcements.length > 0) {
+  badge.textContent = announcements.length;
+  badge.classList.remove("hidden");
+} else {
+  badge.classList.add("hidden");
+}
+
+
 // -------- MENU DATA ----------
 const weeklyMenu = {
   Monday:{ breakfast:"Idli", lunch:"Rice & Sambar", dinner:"Chapati" },
