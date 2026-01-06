@@ -177,3 +177,40 @@ if (postBtn) {
 
 // Initial render
 renderAnnouncements();
+/***********************
+ * WARDEN ANNOUNCEMENTS (DELETE)
+ ***********************/
+const wardenContainer = document.getElementById("wardenAnnouncements");
+
+if (wardenContainer) {
+  const announcements = JSON.parse(localStorage.getItem("announcements")) || [];
+  renderWardenAnnouncements(announcements);
+}
+
+function renderWardenAnnouncements(announcements) {
+  wardenContainer.innerHTML = "";
+
+  if (announcements.length === 0) {
+    wardenContainer.innerHTML = "<p>No announcements posted.</p>";
+    return;
+  }
+
+  announcements.forEach((item, index) => {
+    const div = document.createElement("div");
+    div.className = "menu-day";
+
+    div.innerHTML = `
+      <p>${item.text}</p>
+      <small>${item.time}</small><br/>
+      <button class="delete-btn">Delete</button>
+    `;
+
+    div.querySelector(".delete-btn").addEventListener("click", () => {
+      announcements.splice(index, 1);
+      localStorage.setItem("announcements", JSON.stringify(announcements));
+      renderWardenAnnouncements(announcements);
+    });
+
+    wardenContainer.appendChild(div);
+  });
+}
