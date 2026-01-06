@@ -7,8 +7,8 @@
   min-height: 100vh;
   background:
     linear-gradient(
-      rgba(255, 245, 230, 0.55),
-      rgba(255, 245, 230, 0.55)
+      rgba(255, 245, 230, 0.45),
+      rgba(255, 245, 230, 0.45)
     ),
     url("../img/student.png");
   background-size: cover;
@@ -125,4 +125,33 @@ textarea {
 
 .muted {
   color: #777;
+}
+/* ===== DARK MODE ===== */
+body.dark {
+  background: linear-gradient(
+    rgba(20, 20, 20, 0.75),
+    rgba(20, 20, 20, 0.75)
+  ),
+  url("../images/hostel.png");
+}
+
+body.dark .card {
+  background: rgba(30, 30, 30, 0.9);
+  color: #eee;
+}
+
+body.dark .topbar {
+  color: #eee;
+}
+
+body.dark textarea,
+body.dark select {
+  background: #2b2b2b;
+  color: white;
+  border: 1px solid #555;
+}
+
+body.dark button {
+  background: #f39c12;
+  color: #222;
 }

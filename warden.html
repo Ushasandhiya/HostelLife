@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>HostelLife – Warden Dashboard</title>
+  <link rel="stylesheet" href="css/warden.css" />
+</head>
+
+<body class="warden-bg">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <h2>🧑‍💼 Warden Dashboard</h2>
+
+    <div>
+      <button id="themeToggle">🌙</button>
+      <button id="logoutBtn">Logout</button>
+    </div>
+  </header>
+
+
+  <!-- DASHBOARD GRID -->
+  <main class="dashboard">
+
+    <!-- FOOD RATINGS -->
+    <section class="card stats-card">
+      <h3>📊 Food Ratings</h3>
+      <p><strong>Average Rating:</strong> <span id="avgRating">–</span></p>
+      <p><strong>Total Reviews:</strong> <span id="totalReviews">0</span></p>
+    </section>
+
+    <!-- POST ANNOUNCEMENT -->
+    <section class="card post-card">
+      <h3>📢 Post Announcement</h3>
+      <textarea id="announcementText" placeholder="Write announcement..."></textarea>
+      <button id="postAnnouncement">Post</button>
+      <p id="announceMsg"></p>
+    </section>
+
+    <!-- ANNOUNCEMENTS LIST -->
+    <section class="card announce-list-card">
+      <h3>📋 All Announcements</h3>
+      <div id="announcementList">
+        <p class="muted">No announcements yet</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/warden.js"></script>
+</body>
+</html>

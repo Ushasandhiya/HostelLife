@@ -40,7 +40,13 @@
         return;
       }
       localStorage.setItem("userRole", role);
-      window.location.href = "dashboard.html";
+
+if (role === "student") {
+  window.location.href = "dashboard.html";
+} else if (role === "warden") {
+  window.location.href = "warden.html";
+}
+
     });
   </script>
 

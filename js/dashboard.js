@@ -1,3 +1,18 @@
+const themeBtn = document.getElementById("themeToggle");
+
+if (localStorage.getItem("theme") === "dark") {
+  document.body.classList.add("dark");
+  themeBtn.textContent = "☀️";
+}
+
+themeBtn.onclick = () => {
+  document.body.classList.toggle("dark");
+  const isDark = document.body.classList.contains("dark");
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+  themeBtn.textContent = isDark ? "☀️" : "🌙";
+};
+
+
 // -------- AUTH CHECK ----------
 if (!localStorage.getItem("userRole")) {
   window.location.href = "index.html";
