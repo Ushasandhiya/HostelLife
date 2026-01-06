@@ -8,8 +8,11 @@
 
 <body>
 
-  <!-- Role Banner -->
+  <!-- Role Banner + Logout -->
+   <div class="top-bar">
   <p id="roleBanner"></p>
+  <button id="logoutBtn" class="logout-btn">Logout</button>
+</div>
 
   <!-- STUDENT SECTION -->
   <div class="student-only">
@@ -29,7 +32,7 @@
       </div>
     </div>
 
-    <!-- Rate Today's Food -->
+    <!-- Rate Food -->
     <div class="card">
       <h2>⭐ Rate Today’s Food</h2>
 
@@ -46,33 +49,30 @@
       <p id="reviewMsg"></p>
     </div>
 
-  </div>
-  
-  <div class="card">
-  <h2>📢 Announcements</h2>
-  <div id="announcementList">
-    <p>No announcements yet.</p>
-  </div>
-</div>
+    <!-- Student Announcements -->
+    <div class="card">
+      <h2>📢 Announcements</h2>
+      <div id="announcementList">
+        <p>No announcements yet.</p>
+      </div>
+    </div>
 
+  </div>
 
   <!-- WARDEN SECTION -->
-   <div class="warden-only">
-  <div class="card">
-    <h2>📢 Post Announcement</h2>
-
-    <textarea id="announcementText" placeholder="Write announcement..."></textarea>
-    <button id="postAnnouncement">Post</button>
-    <p id="announceMsg"></p>
+  <div class="warden-only">
+    <div class="card">
+      <h2>📢 Post Announcement</h2>
+      <textarea id="announcementText" placeholder="Write announcement..."></textarea>
+      <button id="postAnnouncement">Post</button>
+      <p id="announceMsg"></p>
+    </div>
   </div>
-</div>
 
-  
-
-  <!-- MENU + RATING LOGIC -->
+  <!-- Main JS -->
   <script src="js/menu.js"></script>
 
-  <!-- TODAY MENU SCRIPT -->
+  <!-- Today Menu -->
   <script>
     const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
     const today = days[new Date().getDay()];
@@ -82,33 +82,28 @@
     document.getElementById("breakfast").innerText = todayMenu.breakfast;
     document.getElementById("lunch").innerText = todayMenu.lunch;
     document.getElementById("dinner").innerText = todayMenu.dinner;
-  </script>
 
-  <!-- WEEKLY MENU SCRIPT -->
-  <script>
     const weeklyMenuContainer = document.getElementById("weeklyMenu");
 
     for (const day in weeklyMenu) {
       const menu = weeklyMenu[day];
-
       const div = document.createElement("div");
       div.className = "menu-day";
-
       div.innerHTML = `
         <h3>${day}</h3>
         <p><strong>Breakfast:</strong> ${menu.breakfast}</p>
         <p><strong>Lunch:</strong> ${menu.lunch}</p>
         <p><strong>Dinner:</strong> ${menu.dinner}</p>
       `;
-
       weeklyMenuContainer.appendChild(div);
     }
   </script>
 
-  <!-- ROLE-BASED VISIBILITY -->
+  <!-- ROLE + LOGOUT (ONLY ONCE) -->
   <script>
     const role = localStorage.getItem("userRole");
     const banner = document.getElementById("roleBanner");
+    const logoutBtn = document.getElementById("logoutBtn");
 
     if (!role) {
       window.location.href = "index.html";
@@ -125,6 +120,11 @@
       document.querySelectorAll(".student-only")
         .forEach(el => el.style.display = "none");
     }
+
+    logoutBtn.addEventListener("click", () => {
+      localStorage.removeItem("userRole");
+      window.location.href = "index.html";
+    });
   </script>
 
 </body>
