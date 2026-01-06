@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>HostelLife – Student Dashboard</title>
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+
+<body class="student-bg">
+
+  <!-- Top Bar -->
+  <header class="topbar">
+    <h2>🎒 Student Dashboard</h2>
+    <button id="logoutBtn">Logout</button>
+  </header>
+
+  <!-- Dashboard Container -->
+  <main class="dashboard">
+
+    <!-- Announcements -->
+    <section class="card announce-card">
+      <h3>📢 Announcements</h3>
+      <div id="announcementList">
+        <p class="muted">No announcements yet</p>
+      </div>
+    </section>
+
+    <!-- Today's Menu -->
+    <section class="card menu-card">
+      <h3>🍽️ Today’s Menu</h3>
+
+      <div class="meal">
+        <span>🍳 Breakfast</span>
+        <p id="breakfast"></p>
+      </div>
+
+      <div class="meal">
+        <span>🍛 Lunch</span>
+        <p id="lunch"></p>
+      </div>
+
+      <div class="meal">
+        <span>🌙 Dinner</span>
+        <p id="dinner"></p>
+      </div>
+
+      <button id="toggleWeekly">View Weekly Menu</button>
+
+      <div id="weeklyMenu" class="weekly hidden"></div>
+    </section>
+
+    <!-- Rating -->
+    <section class="card rating-card">
+      <h3>⭐ Rate Today’s Food</h3>
+
+      <div class="stars">
+        <span data-value="1">★</span>
+        <span data-value="2">★</span>
+        <span data-value="3">★</span>
+        <span data-value="4">★</span>
+        <span data-value="5">★</span>
+      </div>
+
+      <textarea id="reviewText" placeholder="Leave a review..."></textarea>
+      <button id="submitReview">Submit</button>
+
+      <p id="reviewMsg"></p>
+    </section>
+
+  </main>
+
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
