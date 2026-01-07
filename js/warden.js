@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const themeBtn = document.getElementById("themeToggle");
 
   if (themeBtn) {
-    // Apply saved theme
     if (localStorage.getItem("theme") === "dark") {
       document.body.classList.add("dark");
       themeBtn.textContent = "☀️";
@@ -13,7 +12,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     themeBtn.addEventListener("click", () => {
       document.body.classList.toggle("dark");
-
       const isDark = document.body.classList.contains("dark");
       localStorage.setItem("theme", isDark ? "dark" : "light");
       themeBtn.textContent = isDark ? "☀️" : "🌙";
@@ -37,54 +35,46 @@ document.getElementById("logoutBtn").onclick = () => {
 };
 
 /*********************************
- * ANNOUNCEMENTS (FIXED)
+ * ANNOUNCEMENTS (BACKEND)
  *********************************/
-let announcements =
-  JSON.parse(localStorage.getItem("announcements")) || [];
-
 const list = document.getElementById("announcementList");
 const msg = document.getElementById("announceMsg");
+const postBtn = document.getElementById("postAnnouncement");
 
-/* Render announcements */
-function renderAnnouncements() {
-  list.innerHTML = "";
+/* Load announcements from backend */
+async function loadAnnouncements() {
+  try {
+    const res = await fetch("http://localhost:5000/api/announcements");
+    const announcements = await res.json();
 
-  if (announcements.length === 0) {
-    list.innerHTML = "<p class='muted'>No announcements yet</p>";
-    return;
+    list.innerHTML = "";
+
+    if (!announcements || announcements.length === 0) {
+      list.innerHTML = "<p class='muted'>No announcements yet</p>";
+      return;
+    }
+
+    announcements.forEach(a => {
+      const div = document.createElement("div");
+      div.className = "announcement-item";
+
+      div.innerHTML = `
+        <p>${a.text}</p>
+        <small>${a.time}</small>
+      `;
+
+      list.appendChild(div);
+    });
+
+  } catch (err) {
+    list.innerHTML = "<p>Error loading announcements</p>";
+    console.error(err);
   }
-
-  announcements.forEach((a, index) => {
-    // Guard against old corrupted data
-    if (!a.text || !a.time) return;
-
-    const div = document.createElement("div");
-    div.className = "announcement-item";
-
-    div.innerHTML = `
-      <p>${a.text}</p>
-      <small>${a.time}</small><br />
-      <button>Delete</button>
-    `;
-
-    div.querySelector("button").onclick = () => {
-      announcements.splice(index, 1);
-      localStorage.setItem(
-        "announcements",
-        JSON.stringify(announcements)
-      );
-      renderAnnouncements();
-    };
-
-    list.appendChild(div);
-  });
 }
 
-/* Post announcement */
-document.getElementById("postAnnouncement").onclick = () => {
-  const text = document
-    .getElementById("announcementText")
-    .value.trim();
+/* Post announcement to backend */
+postBtn.onclick = async () => {
+  const text = document.getElementById("announcementText").value.trim();
 
   if (!text) {
     msg.textContent = "Announcement cannot be empty";
@@ -92,28 +82,35 @@ document.getElementById("postAnnouncement").onclick = () => {
     return;
   }
 
-  const newAnnouncement = {
-    text: text,
-    time: new Date().toLocaleString()
-  };
+  try {
+    const res = await fetch("http://localhost:5000/api/announcements", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ text })
+    });
 
-  announcements.unshift(newAnnouncement);
-  localStorage.setItem(
-    "announcements",
-    JSON.stringify(announcements)
-  );
+    if (!res.ok) throw new Error("Failed");
 
-  msg.textContent = "Announcement posted ✅";
-  msg.style.color = "green";
-  document.getElementById("announcementText").value = "";
+    msg.textContent = "Announcement posted ✅";
+    msg.style.color = "green";
+    document.getElementById("announcementText").value = "";
 
-  renderAnnouncements();
+    loadAnnouncements(); // refresh list
+
+  } catch (err) {
+    msg.textContent = "Failed to post announcement";
+    msg.style.color = "red";
+    console.error(err);
+  }
 };
 
-renderAnnouncements();
+// Initial load
+loadAnnouncements();
 
 /*********************************
- * RATINGS STATS
+ * RATINGS STATS (UNCHANGED)
  *********************************/
 const ratings = Object.keys(localStorage)
   .filter(k => k.startsWith("review-"))
@@ -133,20 +130,16 @@ const starsEl = document.getElementById("ratingStars");
 const fillEl = document.getElementById("ratingFill");
 
 if (total > 0) {
-  const avg =
-    ratings.reduce((a, b) => a + b, 0) / total;
+  const avg = ratings.reduce((a, b) => a + b, 0) / total;
 
-  document.getElementById("avgRating").textContent =
-    avg.toFixed(1);
+  document.getElementById("avgRating").textContent = avg.toFixed(1);
 
-  // Progress bar (out of 5)
   const percent = (avg / 5) * 100;
   fillEl.style.width = percent + "%";
 
-  // Star color logic
-  starsEl.className = "rating-stars " +
-    (avg <= 1.5 ? "red" :
-     avg <= 3.5 ? "yellow" : "green");
+  starsEl.className =
+    "rating-stars " +
+    (avg <= 1.5 ? "red" : avg <= 3.5 ? "yellow" : "green");
 } else {
   document.getElementById("avgRating").textContent = "–";
   fillEl.style.width = "0%";

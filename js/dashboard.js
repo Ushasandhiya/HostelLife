@@ -76,7 +76,7 @@ async function loadAnnouncements() {
 
 // Load announcements on page load
 loadAnnouncements();
-
+setInterval(loadAnnouncements, 10000);
 /*********************************
  * MENU DATA
  *********************************/
