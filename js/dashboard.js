@@ -33,61 +33,61 @@ document.getElementById("logoutBtn").onclick = () => {
 };
 
 /*********************************
- * STUDENT ANNOUNCEMENTS + BADGE
+ * ANNOUNCEMENTS (BACKEND)
  *********************************/
-let announcements =
-  JSON.parse(localStorage.getItem("announcements")) || [];
+const announcementList = document.getElementById("announcementList");
+const badge = document.getElementById("announcementBadge");
 
-const announcementList =
-  document.getElementById("announcementList");
+async function loadAnnouncements() {
+  try {
+    const res = await fetch("http://localhost:5000/api/announcements");
+    const announcements = await res.json();
 
-const badge =
-  document.getElementById("announcementBadge");
+    announcementList.innerHTML = "";
 
-/* Clean corrupted / old data */
-announcements = announcements.filter(
-  a => typeof a === "object" && a.text && a.time
-);
+    if (!announcements || announcements.length === 0) {
+      announcementList.innerHTML = "<p class='muted'>No announcements yet</p>";
+      badge.classList.add("hidden");
+      return;
+    }
 
-/* ----- Badge count ----- */
-if (announcements.length > 0) {
-  badge.textContent = announcements.length;
-  badge.classList.remove("hidden");
-} else {
-  badge.classList.add("hidden");
+    // Badge count
+    badge.textContent = announcements.length;
+    badge.classList.remove("hidden");
+
+    announcements.forEach(a => {
+      const div = document.createElement("div");
+      div.className = "announcement-card";
+
+      div.innerHTML = `
+        <p>${a.text}</p>
+        <small>${a.time}</small>
+      `;
+
+      announcementList.appendChild(div);
+    });
+
+  } catch (err) {
+    console.error(err);
+    announcementList.innerHTML = "<p>Error loading announcements</p>";
+    badge.classList.add("hidden");
+  }
 }
 
-/* ----- Display announcements ----- */
-announcementList.innerHTML = "";
-
-if (announcements.length === 0) {
-  announcementList.innerHTML =
-    "<p class='muted'>No announcements yet</p>";
-} else {
-  announcements.forEach(a => {
-    const div = document.createElement("div");
-    div.className = "announcement-item";
-
-    div.innerHTML = `
-      <p>${a.text}</p>
-      <small>${a.time}</small>
-    `;
-
-    announcementList.appendChild(div);
-  });
-}
+// Load announcements on page load
+loadAnnouncements();
 
 /*********************************
  * MENU DATA
  *********************************/
 const weeklyMenu = {
-  Monday:{ breakfast:"Idli", lunch:"Rice & Sambar", dinner:"Chapati" },
-  Tuesday:{ breakfast:"Pongal", lunch:"Rasam Rice", dinner:"Dosa" },
-  Wednesday:{ breakfast:"Upma", lunch:"Sambar Rice", dinner:"Paneer Curry" },
-  Thursday:{ breakfast:"Idiyappam", lunch:"Curd Rice", dinner:"Fried Rice" },
-  Friday:{ breakfast:"Dosa", lunch:"Keerai Rice", dinner:"Mixed Veg" },
-  Saturday:{ breakfast:"Poori", lunch:"Chicken/Veg Curry", dinner:"Lemon Rice" },
-  Sunday:{ breakfast:"Masala Dosa", lunch:"Biryani", dinner:"Chapati Kurma" }
+  Monday: { breakfast: "Idli", lunch: "Rice & Sambar", dinner: "Chapati" },
+  Tuesday: { breakfast: "Pongal", lunch: "Rasam Rice", dinner: "Dosa" },
+  Wednesday: { breakfast: "Upma", lunch: "Sambar Rice", dinner: "Paneer Curry" },
+  Thursday: { breakfast: "Idiyappam", lunch: "Curd Rice", dinner: "Fried Rice" },
+  Friday: { breakfast: "Dosa", lunch: "Keerai Rice", dinner: "Mixed Veg" },
+  Saturday: { breakfast: "Poori", lunch: "Chicken/Veg Curry", dinner: "Lemon Rice" },
+  Sunday: { breakfast: "Masala Dosa", lunch: "Biryani", dinner: "Chapati Kurma" }
 };
 
 const days = Object.keys(weeklyMenu);
@@ -121,21 +121,24 @@ for (let day in weeklyMenu) {
 }
 
 /*********************************
- * RATING
+ * FOOD RATING
  *********************************/
 let selected = 0;
 const stars = document.querySelectorAll(".stars span");
 const msg = document.getElementById("reviewMsg");
-const key = "review-" + new Date().toDateString();
+const submitBtn = document.getElementById("submitReview");
 
-if (localStorage.getItem(key)) {
-  lock(JSON.parse(localStorage.getItem(key)));
+const reviewKey = "review-" + new Date().toDateString();
+
+if (localStorage.getItem(reviewKey)) {
+  lock(JSON.parse(localStorage.getItem(reviewKey)));
 }
 
 stars.forEach(star => {
   star.onclick = () => {
     selected = +star.dataset.value;
-    stars.forEach((s,i)=>{
+
+    stars.forEach((s, i) => {
       s.className = "";
       if (i < selected) {
         s.classList.add(
@@ -147,15 +150,15 @@ stars.forEach(star => {
   };
 });
 
-document.getElementById("submitReview").onclick = () => {
+submitBtn.onclick = () => {
   if (!selected) return;
 
   const data = { rating: selected };
-  localStorage.setItem(key, JSON.stringify(data));
+  localStorage.setItem(reviewKey, JSON.stringify(data));
   lock(data);
 };
 
 function lock(data) {
   msg.textContent = `You rated ⭐ ${data.rating}`;
-  document.getElementById("submitReview").disabled = true;
+  submitBtn.disabled = true;
 }
