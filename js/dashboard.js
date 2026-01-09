@@ -27,10 +27,13 @@ if (!localStorage.getItem("userRole")) {
 /*********************************
  * LOGOUT
  *********************************/
-document.getElementById("logoutBtn").onclick = () => {
-  localStorage.removeItem("userRole");
-  window.location.href = "index.html";
-};
+const logoutBtn = document.getElementById("logoutBtn");
+if (logoutBtn) {
+  logoutBtn.onclick = () => {
+    localStorage.removeItem("userRole");
+    window.location.href = "index.html";
+  };
+}
 
 /*********************************
  * ANNOUNCEMENTS (BACKEND)
@@ -39,44 +42,46 @@ const announcementList = document.getElementById("announcementList");
 const badge = document.getElementById("announcementBadge");
 
 async function loadAnnouncements() {
+  announcementList.innerHTML =
+    "<p class='muted'>Loading announcements...</p>";
+
   try {
     const res = await fetch("http://localhost:5000/api/announcements");
-    const announcements = await res.json();
+    if (!res.ok) throw new Error("Server error");
 
+    const announcements = await res.json();
     announcementList.innerHTML = "";
 
-    if (!announcements || announcements.length === 0) {
-      announcementList.innerHTML = "<p class='muted'>No announcements yet</p>";
+    if (!announcements.length) {
+      announcementList.innerHTML =
+        "<p class='muted'>No announcements yet</p>";
       badge.classList.add("hidden");
       return;
     }
 
-    // Badge count
     badge.textContent = announcements.length;
     badge.classList.remove("hidden");
 
     announcements.forEach(a => {
       const div = document.createElement("div");
       div.className = "announcement-card";
-
       div.innerHTML = `
         <p>${a.text}</p>
         <small>${a.time}</small>
       `;
-
       announcementList.appendChild(div);
     });
-
   } catch (err) {
     console.error(err);
-    announcementList.innerHTML = "<p>Error loading announcements</p>";
+    announcementList.innerHTML =
+      "<p class='muted'>Unable to load announcements</p>";
     badge.classList.add("hidden");
   }
 }
 
-// Load announcements on page load
 loadAnnouncements();
 setInterval(loadAnnouncements, 10000);
+
 /*********************************
  * MENU DATA
  *********************************/
@@ -86,12 +91,13 @@ const weeklyMenu = {
   Wednesday: { breakfast: "Upma", lunch: "Sambar Rice", dinner: "Paneer Curry" },
   Thursday: { breakfast: "Idiyappam", lunch: "Curd Rice", dinner: "Fried Rice" },
   Friday: { breakfast: "Dosa", lunch: "Keerai Rice", dinner: "Mixed Veg" },
-  Saturday: { breakfast: "Poori", lunch: "Chicken/Veg Curry", dinner: "Lemon Rice" },
+  Saturday: { breakfast: "Poori", lunch: "Chicken / Veg Curry", dinner: "Lemon Rice" },
   Sunday: { breakfast: "Masala Dosa", lunch: "Biryani", dinner: "Chapati Kurma" }
 };
 
 const days = Object.keys(weeklyMenu);
-const today = days[new Date().getDay() - 1] || "Monday";
+const dayIndex = new Date().getDay();
+const today = days[dayIndex === 0 ? 6 : dayIndex - 1];
 
 document.getElementById("breakfast").textContent =
   weeklyMenu[today].breakfast;
@@ -104,9 +110,13 @@ document.getElementById("dinner").textContent =
  * WEEKLY MENU TOGGLE
  *********************************/
 const weeklyBox = document.getElementById("weeklyMenu");
-document.getElementById("toggleWeekly").onclick = () => {
-  weeklyBox.classList.toggle("hidden");
-};
+const toggleWeeklyBtn = document.getElementById("toggleWeekly");
+
+if (toggleWeeklyBtn) {
+  toggleWeeklyBtn.onclick = () => {
+    weeklyBox.classList.toggle("hidden");
+  };
+}
 
 for (let day in weeklyMenu) {
   const div = document.createElement("div");
@@ -121,7 +131,7 @@ for (let day in weeklyMenu) {
 }
 
 /*********************************
- * FOOD RATING
+ * FOOD RATING (POLISHED – LOCAL)
  *********************************/
 let selected = 0;
 const stars = document.querySelectorAll(".stars span");
@@ -151,7 +161,11 @@ stars.forEach(star => {
 });
 
 submitBtn.onclick = () => {
-  if (!selected) return;
+  if (!selected) {
+    msg.textContent = "Please select a rating ⭐";
+    msg.style.color = "orange";
+    return;
+  }
 
   const data = { rating: selected };
   localStorage.setItem(reviewKey, JSON.stringify(data));
@@ -159,6 +173,14 @@ submitBtn.onclick = () => {
 };
 
 function lock(data) {
-  msg.textContent = `You rated ⭐ ${data.rating}`;
+  msg.textContent = `Thanks for rating today ⭐ ${data.rating}`;
+  msg.style.color = "#4caf50";
+
   submitBtn.disabled = true;
+  submitBtn.textContent = "Submitted";
+
+  stars.forEach(star => {
+    star.style.pointerEvents = "none";
+    star.style.opacity = "0.5";
+  });
 }

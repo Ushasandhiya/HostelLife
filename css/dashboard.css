@@ -166,3 +166,44 @@ body.dark button {
   font-weight: bold;
 }
 
+.stars span {
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.stars span:hover {
+  transform: scale(1.25);
+  filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.8));
+}
+
+#reviewMsg {
+  margin-top: 10px;
+  font-weight: 600;
+}
+/* ⭐ Rating polish */
+.stars span {
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.stars span:hover {
+  transform: scale(1.2);
+}
+
+.stars span.red {
+  color: #ff5252;
+}
+
+.stars span.yellow {
+  color: #ffc107;
+}
+
+.stars span.green {
+  color: #4caf50;
+}
+
+/* Locked state */
+.stars span[style*="pointer-events: none"] {
+  cursor: default;
+}

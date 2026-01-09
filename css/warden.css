@@ -144,3 +144,24 @@ body.warden-bg.dark button {
 .red { color: #e74c3c; }
 .yellow { color: #f1c40f; }
 .green { color: #2ecc71; }
+
+/* ⭐ Food rating display polish */
+.rating-stars span {
+  color: #ffc107;
+  font-size: 20px;
+  margin-right: 2px;
+}
+
+.rating-bar {
+  height: 8px;
+  border-radius: 6px;
+  background: #333;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.rating-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4caf50, #ffc107);
+  transition: width 0.4s ease;
+}
