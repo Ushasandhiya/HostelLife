@@ -2,7 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+
+  <!-- IMPORTANT for mobile responsiveness -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>HostelLife</title>
+
+  <!-- Main styles -->
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -10,8 +16,10 @@
   <!-- HERO SECTION -->
   <section class="hero">
 
+    <!-- Dark overlay -->
     <div class="overlay"></div>
 
+    <!-- Content -->
     <div class="hero-content">
       <h1>Welcome to <span>Our Hostel</span></h1>
       <p>Your home away from home</p>
@@ -29,24 +37,26 @@
 
   </section>
 
+  <!-- SCRIPT -->
   <script>
     const btn = document.getElementById("enterBtn");
     const roleSelect = document.getElementById("roleSelect");
 
     btn.addEventListener("click", () => {
       const role = roleSelect.value;
+
       if (!role) {
         alert("Please select a role");
         return;
       }
+
       localStorage.setItem("userRole", role);
 
-if (role === "student") {
-  window.location.href = "dashboard.html";
-} else if (role === "warden") {
-  window.location.href = "warden.html";
-}
-
+      if (role === "student") {
+        window.location.href = "dashboard.html";
+      } else if (role === "warden") {
+        window.location.href = "warden.html";
+      }
     });
   </script>
 

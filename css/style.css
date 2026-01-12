@@ -1,3 +1,6 @@
+/* ===============================
+   GLOBAL RESET
+   =============================== */
 * {
   margin: 0;
   padding: 0;
@@ -5,29 +8,35 @@
   font-family: "Segoe UI", sans-serif;
 }
 
-/* HERO BACKGROUND */
+/* ===============================
+   HERO SECTION
+   =============================== */
 .hero {
   height: 100vh;
   width: 100%;
-  background: url("../img/img.png") center/cover no-repeat;
+  background: url("../img/img.png") center / cover no-repeat;
   position: relative;
   display: flex;
   align-items: center;
   padding-left: 8%;
 }
 
-/* DARK OVERLAY */
+/* ===============================
+   DARK OVERLAY
+   =============================== */
 .overlay {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.35);
 }
 
-/* CONTENT */
+/* ===============================
+   HERO CONTENT
+   =============================== */
 .hero-content {
   position: relative;
   z-index: 2;
-  color: white;
+  color: #fff;
   max-width: 600px;
 }
 
@@ -37,7 +46,7 @@
   line-height: 1.1;
 }
 
-.hero-content span {
+.hero-content h1 span {
   color: #ffd166;
 }
 
@@ -47,7 +56,9 @@
   opacity: 0.9;
 }
 
-/* ACTION AREA */
+/* ===============================
+   ACTION BOX
+   =============================== */
 .action-box {
   margin-top: 32px;
   display: flex;
@@ -61,6 +72,7 @@
   border: none;
   min-width: 180px;
   font-size: 16px;
+  outline: none;
 }
 
 .action-box button {
@@ -72,9 +84,48 @@
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .action-box button:hover {
   transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* ===============================
+   MOBILE RESPONSIVE FIX
+   =============================== */
+@media (max-width: 768px) {
+
+  .hero {
+    padding: 20px;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hero-content {
+    max-width: 100%;
+  }
+
+  .hero-content h1 {
+    font-size: 28px;
+    line-height: 1.3;
+  }
+
+  .hero-content p {
+    font-size: 14px;
+    margin-top: 10px;
+  }
+
+  .action-box {
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .action-box select,
+  .action-box button {
+    width: 100%;
+    max-width: 260px;
+  }
 }
