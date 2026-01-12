@@ -44,7 +44,7 @@ const postBtn = document.getElementById("postAnnouncement");
 /* Load announcements from backend */
 async function loadAnnouncements() {
   try {
-    const res = await fetch("http://localhost:5000/api/announcements");
+    const res = await fetch("https://hostellife-backend.onrender.com/api/announcements");
     const announcements = await res.json();
 
     list.innerHTML = "";
@@ -83,7 +83,7 @@ postBtn.onclick = async () => {
   }
 
   try {
-    const res = await fetch("http://localhost:5000/api/announcements", {
+    const res = await fetch("https://hostellife-backend.onrender.com/api/announcements", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

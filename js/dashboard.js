@@ -46,7 +46,7 @@ async function loadAnnouncements() {
     "<p class='muted'>Loading announcements...</p>";
 
   try {
-    const res = await fetch("http://localhost:5000/api/announcements");
+    const res = await fetch("https://hostellife-backend.onrender.com/api/announcements");
     if (!res.ok) throw new Error("Server error");
 
     const announcements = await res.json();
