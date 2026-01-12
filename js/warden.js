@@ -55,16 +55,29 @@ async function loadAnnouncements() {
     }
 
     announcements.forEach(a => {
-      const div = document.createElement("div");
-      div.className = "announcement-item";
+  const div = document.createElement("div");
+  div.className = "announcement-item";
 
-      div.innerHTML = `
-        <p>${a.text}</p>
-        <small>${a.time}</small>
-      `;
+  div.innerHTML = `
+    <p>${a.text}</p>
+    <small>${a.time}</small>
+    <button class="delete-btn">Delete</button>
+  `;
 
-      list.appendChild(div);
-    });
+  // DELETE BUTTON LOGIC
+  div.querySelector(".delete-btn").onclick = async () => {
+    if (!confirm("Delete this announcement?")) return;
+
+    await fetch(
+      `https://hostellife-backend.onrender.com/api/announcements/${a._id}`,
+      { method: "DELETE" }
+    );
+
+    loadAnnouncements(); // refresh list
+  };
+
+  list.appendChild(div);
+});
 
   } catch (err) {
     list.innerHTML = "<p>Error loading announcements</p>";
